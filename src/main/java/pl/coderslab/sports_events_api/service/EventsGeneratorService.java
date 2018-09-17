@@ -6,7 +6,7 @@ import pl.coderslab.sports_events_api.entity.League;
 
 import java.util.List;
 
-public interface EventsService {
+public interface EventsGeneratorService {
 
 
     List<Event> generateNewEvents(League league);

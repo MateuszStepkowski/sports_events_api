@@ -7,7 +7,7 @@ import pl.coderslab.sports_events_api.entity.Event;
 import pl.coderslab.sports_events_api.entity.League;
 import pl.coderslab.sports_events_api.entity.Team;
 import pl.coderslab.sports_events_api.repository.TeamRepository;
-import pl.coderslab.sports_events_api.service.EventsService;
+import pl.coderslab.sports_events_api.service.EventsGeneratorService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class EventsServiceImpl implements EventsService {
+public class EventsGeneratorServiceImpl implements EventsGeneratorService {
 
     @Autowired
     TeamRepository teamRepository;
