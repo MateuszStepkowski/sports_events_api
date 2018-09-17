@@ -12,6 +12,6 @@ public interface EventsGeneratorService {
     List<Event> generateNewEvents(League league);
 
 
-    void updateEventState(Event event);
+    List<Event> updateAllInPlayEvents();
 
 }

@@ -2,6 +2,7 @@ package pl.coderslab.sports_events_api.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,12 +23,66 @@ public class Team {
     @ManyToMany
     List<League> leagues = new ArrayList<>();
 
+    @Size(min = 1, max = 100)
+    private int offensiveRating=50;
+
+    @Size(min = 1, max = 100)
+    private int deffensiveRating=50;
+
     public Team() {
     }
 
     public Team(@NotBlank String name, Sport sport) {
         this.name = name;
         this.sport = sport;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Sport getSport() {
+        return sport;
+    }
+
+    public void setSport(Sport sport) {
+        this.sport = sport;
+    }
+
+    public List<League> getLeagues() {
+        return leagues;
+    }
+
+    public void setLeagues(List<League> leagues) {
+        this.leagues = leagues;
+    }
+
+    public int getOffensiveRating() {
+        return offensiveRating;
+    }
+
+    public void setOffensiveRating(int offensiveRating) {
+        this.offensiveRating = offensiveRating;
+    }
+
+    public int getDeffensiveRating() {
+        return deffensiveRating;
+    }
+
+    public void setDeffensiveRating(int deffensiveRating) {
+        this.deffensiveRating = deffensiveRating;
     }
 
     @Override

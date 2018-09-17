@@ -29,9 +29,9 @@ public class Event {
     private Team teamB;
 
 
-    private int teamApts=0;
+    private int teamA_pts=0;
 
-    private int teamBpts=0;
+    private int teamB_pts=0;
 
 
     private LocalDateTime endDate;
@@ -87,20 +87,20 @@ public class Event {
         this.teamB = teamB;
     }
 
-    public int getTeamApts() {
-        return teamApts;
+    public int getTeamA_pts() {
+        return teamA_pts;
     }
 
-    public void setTeamApts(int teamApts) {
-        this.teamApts = teamApts;
+    public void setTeamA_pts(int teamApts) {
+        this.teamA_pts = teamApts;
     }
 
-    public int getTeamBpts() {
-        return teamBpts;
+    public int getTeamB_pts() {
+        return teamB_pts;
     }
 
-    public void setTeamBpts(int teamBpts) {
-        this.teamBpts = teamBpts;
+    public void setTeamB_pts(int teamBpts) {
+        this.teamB_pts = teamBpts;
     }
 
     public LocalDateTime getEndDate() {
@@ -137,8 +137,8 @@ public class Event {
                 ", league=" + league +
                 ", teamA=" + teamA +
                 ", teamB=" + teamB +
-                ", teamApts=" + teamApts +
-                ", teamBpts=" + teamBpts +
+                ", teamApts=" + teamA_pts +
+                ", teamBpts=" + teamB_pts +
                 ", endDate=" + endDate +
                 '}';
     }
