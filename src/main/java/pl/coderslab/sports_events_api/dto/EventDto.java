@@ -3,6 +3,7 @@ package pl.coderslab.sports_events_api.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class EventDto {
