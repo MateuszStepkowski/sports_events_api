@@ -2,6 +2,7 @@ package pl.coderslab.sports_events_api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.coderslab.sports_events_api.dto.EventDto;
 import pl.coderslab.sports_events_api.entity.Event;
 import pl.coderslab.sports_events_api.repository.EventRepository;
 import pl.coderslab.sports_events_api.service.EventService;
@@ -16,8 +17,8 @@ public class EventServiceImpl implements EventService {
     EventRepository eventRepository;
 
     @Override
-    public List<Event> findAllInPlayBySport(LocalDateTime startDate, String sportName) {
-        return eventRepository.findAllByStartDateAfterAndEndDateIsNullAndLeagueSport_Name(startDate, sportName);
+    public List<Event> findAllInPlay() {
+        return eventRepository.findAllByStartDateBeforeAndEndDateIsNull(LocalDateTime.now());
     }
 
     @Override
@@ -30,5 +31,17 @@ public class EventServiceImpl implements EventService {
     public void save(Event event) {
 
         eventRepository.saveAndFlush(event);
+    }
+
+    @Override
+    public EventDto convert(Event event) {
+
+        EventDto eventDto = new EventDto(
+                event.getStartDate(), event.getLeague().getName(),
+                event.getTeamA().getName(), event.getTeamB().getName(),
+                event.getTeamA_pts(), event.getTeamB_pts(),
+                event.getEndDate());
+
+        return eventDto;
     }
 }

@@ -18,155 +18,161 @@ import java.util.Random;
 @Service
 public class EventsGeneratorServiceImpl implements EventsGeneratorService {
 
-    @Autowired
-    TeamService teamService;
-
-    @Autowired
-    EventService eventService;
 
     @Override
-    public List<Event> generateNewEvents(League league) {
+    public Event generateNewEvent(List<Team> teams, League league) {
 
         Random random = new Random();
 
-        List<Team> teams = teamService.findAllInLeague(league);
-
-        List<Event> events = new ArrayList<>();
-        while (teams.size() >= 2) {
+        if (teams.size() >= 2) {
 
             Team teamA = teams.remove(random.nextInt(teams.size())),
                     teamB = teams.remove(random.nextInt(teams.size()));
-
-            LocalDateTime startDate = LocalDateTime.now().plusMinutes(random.nextInt(2) + 1);
-
-            events.add(new Event(startDate, league, teamA, teamB));
+            System.out.println(teamA.getName()+" vs "+teamB.getName()+ " will start in 2 minutes...");
+            return (new Event(LocalDateTime.now().plusMinutes(2), league, teamA, teamB));
 
         }
 
-        return events;
+        return null;
     }
 
     @Override
-    public List<Event> updateAllInPlayEvents() {
+    public Event updateInPlayEvent(Event event) {
 
-        List<Event> updatedEvents = new ArrayList<>();
+        if (event.getLeague().getSport().getName().equals("basketball")) {
+            return updateBasketBallEventState(event);
+        } else if (event.getLeague().getSport().getName().equals("football")) {
+            return updateFootBallEventState(event);
+        }
 
-        updatedEvents.addAll(updateFootBallEventsState());
-        updatedEvents.addAll(updateBasketBallEventsState());
-
-        return updatedEvents;
+        return null;
     }
 
 
-    public List<Event> updateFootBallEventsState() {
+    public Event updateFootBallEventState(Event event) {
 
         Random random = new Random();
 
-        List<Event> footballInPlayEvents = eventService.findAllInPlayBySport(LocalDateTime.now(), "football");
 
-        List<Event> updatedEvents = new ArrayList<>();
+        //game lasts max 2 min
+        if (LocalDateTime.now().minusMinutes(2).isAfter(event.getStartDate())) {
 
-        for (Event event : footballInPlayEvents) {
+            event.setEndDate(LocalDateTime.now());
 
-            //game lasts max 3 min
-            if (LocalDateTime.now().minusMinutes(3l).isAfter(event.getStartDate())) {
+            if (event.getTeamA_pts() > event.getTeamB_pts()){
+                System.out.println("event id: "+event.getId()+"--> "+event.getTeamA().getName()+" Won");
+                event.getTeamB().setLooses(event.getTeamB().getLooses()+1);
+                event.getTeamA().setWins(event.getTeamA().getWins()+1);
+            }else if (event.getTeamA_pts() < event.getTeamB_pts()){
+                System.out.println("event id: "+event.getId()+"--> "+event.getTeamB().getName()+" Won");
+                event.getTeamA().setLooses(event.getTeamA().getLooses()+1);
+                event.getTeamB().setWins(event.getTeamB().getWins()+1);
+            }else {
+                System.out.println("event id: "+event.getId()+"--> Draw");
+                event.getTeamA().setDraws(event.getTeamA().getDraws()+1);
+                event.getTeamB().setDraws(event.getTeamB().getDraws()+1);
 
-                event.setEndDate(LocalDateTime.now());
+            }
 
-                updatedEvents.add(event);
+            return event;
+        }
+
+
+        int teamA_power = event.getTeamA().getOffensiveRating() - event.getTeamB().getDeffensiveRating();
+        int teamB_power = event.getTeamB().getOffensiveRating() - event.getTeamA().getDeffensiveRating();
+
+        //randomize if it is close to goal situation
+        if (random.nextInt(100) - (teamA_power + teamB_power) / 2 < 30) {
+
+            //randomize which team is close to goal situation
+            // taking account of both teams offensive & deffensive power
+            teamA_power = (event.getTeamA().getOffensiveRating() + event.getTeamA().getDeffensiveRating()) / 2;
+            teamB_power = (event.getTeamB().getOffensiveRating() + event.getTeamB().getDeffensiveRating()) / 2;
+
+            //if true --> teamA has goal situation, else teamB
+            if (random.nextInt(100) - (teamA_power - teamB_power) / 2 < 50) {
+
+                System.out.println("event id: "+event.getId()+"--> "+event.getTeamA().getName()+" has a goal situation");
+
+                teamA_power = event.getTeamA().getOffensiveRating();
+                teamB_power = event.getTeamB().getDeffensiveRating();
+
+
+                if (random.nextInt(100) - (teamA_power - teamB_power) / 2 < 50) {
+
+                    System.out.println("event id: "+event.getId()+"--> "+event.getTeamA().getName()+" scored !!!");
+
+
+                    event.setTeamA_pts(event.getTeamA_pts() + 1);
+
+                    return event;
+                }
+
             } else {
 
-                int teamA_power = event.getTeamA().getOffensiveRating() - event.getTeamB().getDeffensiveRating();
-                int teamB_power = event.getTeamB().getOffensiveRating() - event.getTeamA().getDeffensiveRating();
+                System.out.println("event id: "+event.getId()+"--> "+event.getTeamB().getName()+" has a goal situation");
 
-                //randomize if there is a goal situation
-                if (random.nextInt(100) - (teamA_power + teamB_power) / 2 < 40) {
-
-                    //randomize which team has goal situation
-                    // taking account of both teams offensive & deffensive power
-                    teamA_power = (event.getTeamA().getOffensiveRating() + event.getTeamA().getDeffensiveRating()) / 2;
-                    teamB_power = (event.getTeamB().getOffensiveRating() + event.getTeamB().getDeffensiveRating()) / 2;
-
-                    //if true --> teamA has goal situation, else teamB
-                    if (random.nextInt(100) - (teamA_power - teamB_power) / 2 < 50) {
-
-                        teamA_power = event.getTeamA().getOffensiveRating();
-                        teamB_power = event.getTeamB().getDeffensiveRating();
+                teamB_power = event.getTeamB().getOffensiveRating();
+                teamA_power = event.getTeamA().getDeffensiveRating();
 
 
-                        if (random.nextInt(100) - (teamA_power - teamB_power) / 2 < 50) {
+                if (random.nextInt(100) - (teamB_power - teamA_power) / 2 < 50) {
 
-                            event.setTeamA_pts(event.getTeamA_pts() + 1);
-                            updatedEvents.add(event);
-                        }
+                    System.out.println("event id: "+event.getId()+"--> "+event.getTeamB().getName()+" scored !!!");
 
-                    } else {
-                        teamB_power = event.getTeamB().getOffensiveRating();
-                        teamA_power = event.getTeamA().getDeffensiveRating();
+                    event.setTeamB_pts(event.getTeamB_pts() + 1);
 
-
-                        if (random.nextInt(100) - (teamB_power - teamA_power) / 2 < 50) {
-
-                            event.setTeamB_pts(event.getTeamB_pts() + 1);
-                            updatedEvents.add(event);
-                        }
-                    }
+                    return event;
                 }
             }
         }
 
-        return updatedEvents;
+        return null;
     }
 
-    public List<Event> updateBasketBallEventsState() {
+    public Event updateBasketBallEventState(Event event) {
 
         Random random = new Random();
 
-        List<Event> basketballInPlayEvents = eventService.findAllInPlayBySport(LocalDateTime.now(), "basketball");
 
-        List<Event> updatedEvents = new ArrayList<>();
+        //game lasts max 2 min
+        if (LocalDateTime.now().minusMinutes(2).isAfter(event.getStartDate())) {
 
-        for (Event event : basketballInPlayEvents) {
+            event.setEndDate(LocalDateTime.now());
 
-            //game lasts max 3 min
-            if (LocalDateTime.now().minusMinutes(3l).isAfter(event.getStartDate())) {
+            return event;
 
-                event.setEndDate(LocalDateTime.now());
-                updatedEvents.add(event);
-
-            } else {
-
-                int teamA_power = event.getTeamA().getOffensiveRating() - event.getTeamB().getDeffensiveRating();
-                int teamB_power = event.getTeamB().getOffensiveRating() - event.getTeamA().getDeffensiveRating();
-
-                //randomize abstract amount of basket situations for each team
-                int basket_situations = random.nextInt(15) * (teamA_power + teamB_power) / 20;
-
-                // split basket situations between both teams with a little random factor
-
-                teamA_power = (event.getTeamA().getOffensiveRating() + event.getTeamA().getDeffensiveRating()) / 2;
-                teamB_power = (event.getTeamB().getOffensiveRating() + event.getTeamB().getDeffensiveRating()) / 2;
-
-                int teamA_situations = Math.toIntExact(Math.round(basket_situations / 2 * teamA_power / teamB_power * (1 + Math.random() / 2)));
-                int teamB_situations = Math.toIntExact(Math.round(basket_situations / 2 * teamB_power / teamA_power * (1 + Math.random() / 2)));
-
-
-                teamA_power = event.getTeamA().getOffensiveRating() - event.getTeamB().getDeffensiveRating();
-                teamB_power = event.getTeamB().getOffensiveRating() - event.getTeamA().getDeffensiveRating();
-
-
-                int teamA_scoredPoints = teamA_situations * (1 + teamA_power / 100) * 2;
-                int teamB_scoredPoints = teamB_situations * (1 + teamB_power / 100) * 2;
-
-
-                event.setTeamA_pts(event.getTeamA_pts() + teamA_scoredPoints);
-                event.setTeamB_pts(event.getTeamB_pts() + teamB_scoredPoints);
-                updatedEvents.add(event);
-
-            }
         }
 
-        return updatedEvents;
-    }
+
+        int teamA_power = event.getTeamA().getOffensiveRating() - event.getTeamB().getDeffensiveRating();
+        int teamB_power = event.getTeamB().getOffensiveRating() - event.getTeamA().getDeffensiveRating();
+
+        //randomize abstract amount of basket situations for each team
+        int basket_situations = random.nextInt(15) * (teamA_power + teamB_power) / 20;
+
+        // split basket situations between both teams with a little random factor
+
+        teamA_power = (event.getTeamA().getOffensiveRating() + event.getTeamA().getDeffensiveRating()) / 2;
+        teamB_power = (event.getTeamB().getOffensiveRating() + event.getTeamB().getDeffensiveRating()) / 2;
+
+        int teamA_situations = Math.toIntExact(Math.round(basket_situations / 2 * teamA_power / teamB_power * (1 + Math.random() / 2)));
+        int teamB_situations = Math.toIntExact(Math.round(basket_situations / 2 * teamB_power / teamA_power * (1 + Math.random() / 2)));
+
+
+        teamA_power = event.getTeamA().getOffensiveRating() - event.getTeamB().getDeffensiveRating();
+        teamB_power = event.getTeamB().getOffensiveRating() - event.getTeamA().getDeffensiveRating();
+
+
+        int teamA_scoredPoints = teamA_situations * (1 + teamA_power / 100) * 2;
+        int teamB_scoredPoints = teamB_situations * (1 + teamB_power / 100) * 2;
+
+
+        event.setTeamA_pts(event.getTeamA_pts() + teamA_scoredPoints);
+        event.setTeamB_pts(event.getTeamB_pts() + teamB_scoredPoints);
+
+
+        return event;
+}
 }
 

@@ -5,11 +5,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import pl.coderslab.sports_events_api.service.EventsSimulatorService;
+import pl.coderslab.sports_events_api.service.EventService;
+import pl.coderslab.sports_events_api.service.EventsDataSupplierService;
 
 @EnableScheduling
 @SpringBootApplication
-public class SportsEventsApiApplication implements CommandLineRunner {
+public class SportsEventsApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SportsEventsApiApplication.class, args);
@@ -17,16 +18,9 @@ public class SportsEventsApiApplication implements CommandLineRunner {
 
 
     @Autowired
-    EventsSimulatorService simulatorService;
+    EventsDataSupplierService simulatorService;
 
-    @Override
-    public void run(String... args) throws Exception {
+    @Autowired
+    EventService eventService;
 
-
-        simulatorService.generateNew();
-        simulatorService.simulateGenerated();
-
-
-
-    }
 }

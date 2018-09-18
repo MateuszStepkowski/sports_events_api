@@ -20,7 +20,7 @@ public class Team {
     @ManyToOne
     private Sport sport;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "teams")
     List<League> leagues = new ArrayList<>();
 
     @Size(min = 1, max = 100)
@@ -28,6 +28,10 @@ public class Team {
 
     @Size(min = 1, max = 100)
     private int deffensiveRating=50;
+
+    private int wins=0;
+    private int looses=0;
+    private int draws =0;
 
     public Team() {
     }
@@ -85,6 +89,30 @@ public class Team {
         this.deffensiveRating = deffensiveRating;
     }
 
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getLooses() {
+        return looses;
+    }
+
+    public void setLooses(int looses) {
+        this.looses = looses;
+    }
+
+    public int getDraws() {
+        return draws;
+    }
+
+    public void setDraws(int draws) {
+        this.draws = draws;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,9 +132,12 @@ public class Team {
     @Override
     public String toString() {
         return "Team{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", sport=" + sport +
+                "name='" + name + '\'' +
+                ", offensiveRating=" + offensiveRating +
+                ", deffensiveRating=" + deffensiveRating +
+                ", wins=" + wins +
+                ", looses=" + looses +
+                ", draws=" + draws +
                 '}';
     }
 }

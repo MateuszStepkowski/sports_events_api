@@ -1,37 +1,50 @@
 package pl.coderslab.sports_events_api.dto;
 
 
-import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 public class EventDto {
 
-    private Date startDate;
+    @NotNull
+    private LocalDateTime startDate;
 
+    @NotBlank
     private String league;
 
+    @NotBlank
     private String teamA;
 
+    @NotBlank
     private String teamB;
 
-    private int teamApoints=0;
 
-    private int teamBpoints=0;
+    private int teamA_pts=0;
 
-    private Date endDate;
+    private int teamB_pts=0;
 
 
-    public EventDto(Date startDate, String league, String teamA, String teamB) {
+    private LocalDateTime endDate;
+
+
+    public EventDto(@NotNull LocalDateTime startDate, @NotBlank String league,
+                    @NotBlank String teamA, @NotBlank String teamB,
+                    int teamA_pts, int teamB_pts, LocalDateTime endDate) {
         this.startDate = startDate;
         this.league = league;
         this.teamA = teamA;
         this.teamB = teamB;
+        this.teamA_pts = teamA_pts;
+        this.teamB_pts = teamB_pts;
+        this.endDate = endDate;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
@@ -59,27 +72,40 @@ public class EventDto {
         this.teamB = teamB;
     }
 
-    public int getTeamApoints() {
-        return teamApoints;
+    public int getTeamA_pts() {
+        return teamA_pts;
     }
 
-    public void setTeamApoints(int teamApoints) {
-        this.teamApoints = teamApoints;
+    public void setTeamA_pts(int teamA_pts) {
+        this.teamA_pts = teamA_pts;
     }
 
-    public int getTeamBpoints() {
-        return teamBpoints;
+    public int getTeamB_pts() {
+        return teamB_pts;
     }
 
-    public void setTeamBpoints(int teamBpoints) {
-        this.teamBpoints = teamBpoints;
+    public void setTeamB_pts(int teamB_pts) {
+        this.teamB_pts = teamB_pts;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return "EventDto{" +
+                "startDate=" + startDate +
+                ", league='" + league + '\'' +
+                ", teamA='" + teamA + '\'' +
+                ", teamB='" + teamB + '\'' +
+                ", teamA_pts=" + teamA_pts +
+                ", teamB_pts=" + teamB_pts +
+                ", endDate='" + endDate + '\'' +
+                '}';
     }
 }

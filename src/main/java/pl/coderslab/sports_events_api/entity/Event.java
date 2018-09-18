@@ -21,11 +21,11 @@ public class Event {
     private League league;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Team teamA;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Team teamB;
 
 
@@ -37,7 +37,7 @@ public class Event {
     private LocalDateTime endDate;
 
 
-    public Event(LocalDateTime now) {
+    public Event() {
     }
 
     public Event(@NotNull LocalDateTime startDate, @NotNull League league, @NotNull Team teamA, @NotNull Team teamB) {
@@ -131,7 +131,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "EventDto{" +
+        return "Event{" +
                 "id=" + id +
                 ", startDate=" + startDate +
                 ", league=" + league +

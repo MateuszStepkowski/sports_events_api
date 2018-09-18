@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EventRepository extends JpaRepository <Event, Integer> {
 
-    List<Event> findAllByStartDateAfterAndEndDateIsNullAndLeagueSport_Name(LocalDateTime startDate, String sportName);
+    List<Event> findAllByStartDateBeforeAndEndDateIsNull(LocalDateTime startDate);
 
 
 }

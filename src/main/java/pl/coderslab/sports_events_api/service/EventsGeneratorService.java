@@ -3,15 +3,16 @@ package pl.coderslab.sports_events_api.service;
 
 import pl.coderslab.sports_events_api.entity.Event;
 import pl.coderslab.sports_events_api.entity.League;
+import pl.coderslab.sports_events_api.entity.Team;
 
 import java.util.List;
 
 public interface EventsGeneratorService {
 
 
-    List<Event> generateNewEvents(League league);
+    Event generateNewEvent(List<Team> teams, League league);
 
 
-    List<Event> updateAllInPlayEvents();
+    Event updateInPlayEvent(Event event);
 
 }
