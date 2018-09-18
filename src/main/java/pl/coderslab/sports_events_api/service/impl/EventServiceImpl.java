@@ -34,10 +34,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto convert(Event event) {
+    public EventDto convertToDto(Event event) {
 
         EventDto eventDto = new EventDto(
-                event.getStartDate(), event.getLeague().getName(),
+                event.getStartDate(),event.getLeague().getSport().getName(),
+                event.getLeague().getCountry().getName(), event.getLeague().getName(),
                 event.getTeamA().getName(), event.getTeamB().getName(),
                 event.getTeamA_pts(), event.getTeamB_pts(),
                 event.getEndDate());

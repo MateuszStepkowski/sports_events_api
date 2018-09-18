@@ -54,7 +54,7 @@ public class EventsDataSupplierServiceImpl implements EventsDataSupplierService 
                 generatedEvents.add(event);
 
                 //supplying data by JMS
-                JSONObject eventJson = new JSONObject(eventService.convert(event));
+                JSONObject eventJson = new JSONObject(eventService.convertToDto(event));
                 jmsProducer.send(eventJson.toString(), newEventsQueue);
 
             }
@@ -81,7 +81,7 @@ public class EventsDataSupplierServiceImpl implements EventsDataSupplierService 
                 updatedEvents.add(simulatedEvent);
 
                 //supplying data by JMS
-                JSONObject eventJson = new JSONObject(eventService.convert(simulatedEvent));
+                JSONObject eventJson = new JSONObject(eventService.convertToDto(simulatedEvent));
                 jmsProducer.send(eventJson.toString(), eventsUpdateQueue);
             }
         }

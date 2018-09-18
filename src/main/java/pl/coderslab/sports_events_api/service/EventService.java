@@ -14,5 +14,5 @@ public interface EventService {
 
     void save(Event event);
 
-    EventDto convert(Event event);
+    EventDto convertToDto(Event event);
 }
