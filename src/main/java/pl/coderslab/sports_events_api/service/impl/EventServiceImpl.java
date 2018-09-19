@@ -7,7 +7,7 @@ import pl.coderslab.sports_events_api.entity.Event;
 import pl.coderslab.sports_events_api.repository.EventRepository;
 import pl.coderslab.sports_events_api.service.EventService;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -18,7 +18,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findAllInPlay() {
-        return eventRepository.findAllByStartDateBeforeAndEndDateIsNull(LocalDateTime.now());
+        return eventRepository.findAllByStartDateBeforeAndEndDateIsNull(new Timestamp(System.currentTimeMillis()));
     }
 
     @Override

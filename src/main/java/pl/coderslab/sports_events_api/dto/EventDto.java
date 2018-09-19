@@ -4,12 +4,12 @@ package pl.coderslab.sports_events_api.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class EventDto {
 
     @NotNull
-    private LocalDateTime startDate;
+    private Timestamp startDate;
 
     @NotBlank
     private String sport;
@@ -33,12 +33,12 @@ public class EventDto {
 
     private int live_duration_time = 0;
 
-    private LocalDateTime endDate;
+    private Timestamp endDate;
 
 
-    public EventDto(@NotNull LocalDateTime startDate, @NotBlank String sport, @NotBlank String country,
+    public EventDto(@NotNull Timestamp startDate, @NotBlank String sport, @NotBlank String country,
                     @NotBlank String league, @NotBlank String teamA, @NotBlank String teamB,
-                    int teamA_pts, int teamB_pts, LocalDateTime endDate, int live_duration_time) {
+                    int teamA_pts, int teamB_pts, Timestamp endDate, int live_duration_time) {
         this.startDate = startDate;
         this.sport = sport;
         this.country = country;
@@ -51,7 +51,7 @@ public class EventDto {
         this.live_duration_time = live_duration_time;
     }
 
-    public LocalDateTime getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
@@ -79,7 +79,7 @@ public class EventDto {
         this.live_duration_time = live_duration_time;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
@@ -123,11 +123,11 @@ public class EventDto {
         this.teamB_pts = teamB_pts;
     }
 
-    public LocalDateTime getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 

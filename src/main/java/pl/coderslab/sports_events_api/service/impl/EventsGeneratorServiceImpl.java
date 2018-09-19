@@ -10,10 +10,11 @@ import pl.coderslab.sports_events_api.service.EventService;
 import pl.coderslab.sports_events_api.service.EventsGeneratorService;
 import pl.coderslab.sports_events_api.service.TeamService;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class EventsGeneratorServiceImpl implements EventsGeneratorService {
@@ -29,7 +30,8 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
             Team teamA = teams.remove(random.nextInt(teams.size())),
                     teamB = teams.remove(random.nextInt(teams.size()));
             System.out.println(teamA.getName()+" vs "+teamB.getName()+ " will start in 2 minutes...");
-            return (new Event(LocalDateTime.now().plusMinutes(2), league, teamA, teamB));
+            Timestamp now = new Timestamp(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2));
+            return (new Event(now, league, teamA, teamB));
 
         }
 
@@ -55,11 +57,12 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
 
 
         //game lasts max 2 min
-        if (LocalDateTime.now().minusMinutes(2).isAfter(event.getStartDate())) {
+        Timestamp now = new Timestamp(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2));
+        if (now.after(event.getStartDate())) {
 
             event.setLive_duration_time(event.getLive_duration_time()+random.nextInt(4)+7);
             if (event.getLive_duration_time()<90) event.setLive_duration_time(90);
-            event.setEndDate(LocalDateTime.now());
+            event.setEndDate(now);
 
             if (event.getTeamA_pts() > event.getTeamB_pts()){
                 System.out.println("event id: "+event.getId()+"--> "+event.getTeamA().getName()+" Won");
@@ -143,10 +146,11 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
 
 
         //game lasts max 2 min
-        if (LocalDateTime.now().minusMinutes(2).isAfter(event.getStartDate())) {
+        Timestamp now = new Timestamp(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2));
+        if (now.after(event.getStartDate())) {
 
             event.setLive_duration_time(40);
-            event.setEndDate(LocalDateTime.now());
+            event.setEndDate(now);
 
             return event;
 
