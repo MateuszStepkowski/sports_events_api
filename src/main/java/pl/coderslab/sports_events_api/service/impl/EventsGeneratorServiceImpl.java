@@ -57,6 +57,8 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
         //game lasts max 2 min
         if (LocalDateTime.now().minusMinutes(2).isAfter(event.getStartDate())) {
 
+            event.setLive_duration_time(event.getLive_duration_time()+random.nextInt(4)+7);
+            if (event.getLive_duration_time()<90) event.setLive_duration_time(90);
             event.setEndDate(LocalDateTime.now());
 
             if (event.getTeamA_pts() > event.getTeamB_pts()){
@@ -81,6 +83,7 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
         int teamA_power = event.getTeamA().getOffensiveRating() - event.getTeamB().getDeffensiveRating();
         int teamB_power = event.getTeamB().getOffensiveRating() - event.getTeamA().getDeffensiveRating();
 
+        event.setLive_duration_time(event.getLive_duration_time()+random.nextInt(4)+7);
         //randomize if it is close to goal situation
         if (random.nextInt(100) - (teamA_power + teamB_power) / 2 < 30) {
 
@@ -92,7 +95,8 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
             //if true --> teamA has goal situation, else teamB
             if (random.nextInt(100) - (teamA_power - teamB_power) / 2 < 50) {
 
-                System.out.println("event id: "+event.getId()+"--> "+event.getTeamA().getName()+" has a goal situation");
+                System.out.println("\ntime: "+event.getLive_duration_time()+"'"+
+                        "event id: "+event.getId()+"--> "+event.getTeamA().getName()+" has a goal situation");
 
                 teamA_power = event.getTeamA().getOffensiveRating();
                 teamB_power = event.getTeamB().getDeffensiveRating();
@@ -100,7 +104,8 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
 
                 if (random.nextInt(100) - (teamA_power - teamB_power) / 2 < 50) {
 
-                    System.out.println("event id: "+event.getId()+"--> "+event.getTeamA().getName()+" scored !!!");
+                    System.out.println("\ntime: "+event.getLive_duration_time()+"'"+
+                            "event id: "+event.getId()+"--> "+event.getTeamA().getName()+" scored !!!");
 
 
                     event.setTeamA_pts(event.getTeamA_pts() + 1);
@@ -110,7 +115,8 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
 
             } else {
 
-                System.out.println("event id: "+event.getId()+"--> "+event.getTeamB().getName()+" has a goal situation");
+                System.out.println("\ntime: "+event.getLive_duration_time()+"'"+
+                        "event id: "+event.getId()+"--> "+event.getTeamB().getName()+" has a goal situation");
 
                 teamB_power = event.getTeamB().getOffensiveRating();
                 teamA_power = event.getTeamA().getDeffensiveRating();
@@ -118,7 +124,8 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
 
                 if (random.nextInt(100) - (teamB_power - teamA_power) / 2 < 50) {
 
-                    System.out.println("event id: "+event.getId()+"--> "+event.getTeamB().getName()+" scored !!!");
+                    System.out.println("\ntime: "+event.getLive_duration_time()+"'"+
+                            "event id: "+event.getId()+"--> "+event.getTeamB().getName()+" scored !!!");
 
                     event.setTeamB_pts(event.getTeamB_pts() + 1);
 
@@ -127,7 +134,7 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
             }
         }
 
-        return null;
+        return event;
     }
 
     public Event updateBasketBallEventState(Event event) {
@@ -138,12 +145,16 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
         //game lasts max 2 min
         if (LocalDateTime.now().minusMinutes(2).isAfter(event.getStartDate())) {
 
+            event.setLive_duration_time(40);
             event.setEndDate(LocalDateTime.now());
 
             return event;
 
         }
 
+
+        event.setLive_duration_time(event.getLive_duration_time()+random.nextInt(3)+3);
+        if (event.getLive_duration_time()>40) event.setLive_duration_time(40);
 
         int teamA_power = event.getTeamA().getOffensiveRating() - event.getTeamB().getDeffensiveRating();
         int teamB_power = event.getTeamB().getOffensiveRating() - event.getTeamA().getDeffensiveRating();
@@ -170,6 +181,11 @@ public class EventsGeneratorServiceImpl implements EventsGeneratorService {
 
         event.setTeamA_pts(event.getTeamA_pts() + teamA_scoredPoints);
         event.setTeamB_pts(event.getTeamB_pts() + teamB_scoredPoints);
+
+        System.out.println("\ntime: "+event.getLive_duration_time()+"':"+
+                "event id:"+event.getId()+"-->"+
+                event.getTeamA().getName()+" |"+event.getTeamA_pts()+":"+
+                event.getTeamB_pts()+"| "+event.getTeamB().getName());
 
 
         return event;

@@ -4,14 +4,12 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import pl.coderslab.sports_events_api.dto.EventDto;
 import pl.coderslab.sports_events_api.entity.Event;
 import pl.coderslab.sports_events_api.entity.League;
 import pl.coderslab.sports_events_api.entity.Team;
 import pl.coderslab.sports_events_api.jms.JmsProducer;
 import pl.coderslab.sports_events_api.service.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

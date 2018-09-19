@@ -31,13 +31,14 @@ public class EventDto {
 
     private int teamB_pts=0;
 
+    private int live_duration_time = 0;
 
     private LocalDateTime endDate;
 
 
     public EventDto(@NotNull LocalDateTime startDate, @NotBlank String sport, @NotBlank String country,
                     @NotBlank String league, @NotBlank String teamA, @NotBlank String teamB,
-                    int teamA_pts, int teamB_pts, LocalDateTime endDate) {
+                    int teamA_pts, int teamB_pts, LocalDateTime endDate, int live_duration_time) {
         this.startDate = startDate;
         this.sport = sport;
         this.country = country;
@@ -47,10 +48,35 @@ public class EventDto {
         this.teamA_pts = teamA_pts;
         this.teamB_pts = teamB_pts;
         this.endDate = endDate;
+        this.live_duration_time = live_duration_time;
     }
 
     public LocalDateTime getStartDate() {
         return startDate;
+    }
+
+    public String getSport() {
+        return sport;
+    }
+
+    public void setSport(String sport) {
+        this.sport = sport;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public int getLive_duration_time() {
+        return live_duration_time;
+    }
+
+    public void setLive_duration_time(int live_duration_time) {
+        this.live_duration_time = live_duration_time;
     }
 
     public void setStartDate(LocalDateTime startDate) {
