@@ -13,7 +13,6 @@ public class JmsProducer {
 
     @Autowired
     public JmsProducer(JmsTemplate jmsTemplate) {
-        jmsTemplate.setPubSubDomain(true);
         this.jmsTemplate = jmsTemplate;
     }
 

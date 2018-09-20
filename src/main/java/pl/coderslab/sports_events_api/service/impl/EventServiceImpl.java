@@ -40,8 +40,7 @@ public class EventServiceImpl implements EventService {
                 event.getStartDate(),event.getLeague().getSport().getName(),
                 event.getLeague().getCountry().getName(), event.getLeague().getName(),
                 event.getTeamA().getName(), event.getTeamB().getName(),
-                event.getTeamA_pts(), event.getTeamB_pts(),
-                event.getEndDate(), event.getLive_duration_time());
+                event.getTeamA_pts(), event.getTeamB_pts(), event.getLive_duration_time());
 
         return eventDto;
     }

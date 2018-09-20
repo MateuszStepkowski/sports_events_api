@@ -1,6 +1,9 @@
 package pl.coderslab.sports_events_api.dto;
 
 
+import pl.coderslab.sports_events_api.dto.enums.DataTypeEnum;
+import pl.coderslab.sports_events_api.dto.enums.EventIsEndedEnum;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -26,6 +29,9 @@ public class EventDto {
     @NotBlank
     private String teamB;
 
+    @NotBlank
+    private DataTypeEnum dataType;
+
 
     private int teamA_pts=0;
 
@@ -33,12 +39,12 @@ public class EventDto {
 
     private int live_duration_time = 0;
 
-    private Timestamp endDate;
+    private EventIsEndedEnum statusEnum = EventIsEndedEnum.NO;
 
 
     public EventDto(@NotNull Timestamp startDate, @NotBlank String sport, @NotBlank String country,
-                    @NotBlank String league, @NotBlank String teamA, @NotBlank String teamB,
-                    int teamA_pts, int teamB_pts, Timestamp endDate, int live_duration_time) {
+                    @NotBlank String league, @NotBlank String teamA,
+                    @NotBlank String teamB, int teamA_pts, int teamB_pts, int live_duration_time) {
         this.startDate = startDate;
         this.sport = sport;
         this.country = country;
@@ -47,12 +53,19 @@ public class EventDto {
         this.teamB = teamB;
         this.teamA_pts = teamA_pts;
         this.teamB_pts = teamB_pts;
-        this.endDate = endDate;
         this.live_duration_time = live_duration_time;
     }
 
     public Timestamp getStartDate() {
         return startDate;
+    }
+
+    public DataTypeEnum getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(DataTypeEnum dataType) {
+        this.dataType = dataType;
     }
 
     public String getSport() {
@@ -123,26 +136,28 @@ public class EventDto {
         this.teamB_pts = teamB_pts;
     }
 
-    public Timestamp getEndDate() {
-        return endDate;
+    public EventIsEndedEnum getStatusEnum() {
+        return statusEnum;
     }
 
-    public void setEndDate(Timestamp endDate) {
-        this.endDate = endDate;
+    public void setStatusEnum(EventIsEndedEnum statusEnum) {
+        this.statusEnum = statusEnum;
     }
 
     @Override
     public String toString() {
         return "EventDto{" +
                 "startDate=" + startDate +
+                ", sport='" + sport + '\'' +
                 ", country='" + country + '\'' +
                 ", league='" + league + '\'' +
-                ", sport='" + sport + '\'' +
                 ", teamA='" + teamA + '\'' +
                 ", teamB='" + teamB + '\'' +
+                ", dataType=" + dataType +
                 ", teamA_pts=" + teamA_pts +
                 ", teamB_pts=" + teamB_pts +
-                ", endDate=" + endDate +
+                ", live_duration_time=" + live_duration_time +
+                ", statusEnum=" + statusEnum +
                 '}';
     }
 }

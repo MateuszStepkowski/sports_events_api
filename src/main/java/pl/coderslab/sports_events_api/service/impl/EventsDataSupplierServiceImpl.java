@@ -4,6 +4,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import pl.coderslab.sports_events_api.dto.EventDto;
+import pl.coderslab.sports_events_api.dto.enums.DataTypeEnum;
+import pl.coderslab.sports_events_api.dto.enums.EventIsEndedEnum;
 import pl.coderslab.sports_events_api.entity.Event;
 import pl.coderslab.sports_events_api.entity.League;
 import pl.coderslab.sports_events_api.entity.Team;
@@ -31,12 +34,11 @@ public class EventsDataSupplierServiceImpl implements EventsDataSupplierService 
     @Autowired
     JmsProducer jmsProducer;
 
-    private final String newEventsQueue = "new_events.t";
-    private final String eventsUpdateQueue = "events_update.t";
+    private final String eventsDataQueue = "events_data.t";
 
 
     @Override
-    @Scheduled(fixedRate = (5 * 60 * 1000), initialDelay = 5 * 1000)
+    @Scheduled(fixedRate = (8 * 60 * 1000), initialDelay = 5 * 1000)
     public void generateAndSupply() {
         System.out.println("Started generating");
         List<League> leagues = leagueService.findAll();
@@ -49,21 +51,20 @@ public class EventsDataSupplierServiceImpl implements EventsDataSupplierService 
             while (teams.size() > 1) {
 
                 Event event = generatorService.generateNewEvent(teams, league);
-                generatedEvents.add(event);
 
                 //supplying data by JMS
-                JSONObject eventJson = new JSONObject(eventService.convertToDto(event));
-                jmsProducer.send(eventJson.toString(), newEventsQueue);
-
+                EventDto dto = eventService.convertToDto(event);
+                dto.setDataType(DataTypeEnum.NEW);
+                JSONObject eventJson = new JSONObject(dto);
+                jmsProducer.send(eventJson.toString(), eventsDataQueue);
+                eventService.save(event);
             }
         }
-
-
-        eventService.saveAll(generatedEvents);
     }
 
+    //    @Scheduled(fixedRate = (102 * 1000), initialDelay = (2 * 60 * 1000 + 1000))
     @Override
-    @Scheduled(fixedRate = (12 * 1000), initialDelay = (2 * 60 * 1000 + 1000))
+    @Scheduled(fixedRate = (12000), initialDelay = (5000))
     public void simulateGeneratedAndSupply() {
 
         List<Event> inPlayEvents = eventService.findAllInPlay();
@@ -79,12 +80,15 @@ public class EventsDataSupplierServiceImpl implements EventsDataSupplierService 
                 updatedEvents.add(simulatedEvent);
 
                 //supplying data by JMS
-                JSONObject eventJson = new JSONObject(eventService.convertToDto(simulatedEvent));
-                jmsProducer.send(eventJson.toString(), eventsUpdateQueue);
+                EventDto dto = eventService.convertToDto(simulatedEvent);
+                dto.setDataType(DataTypeEnum.UPDATE);
+                if (event.getEndDate() != null) dto.setStatusEnum(EventIsEndedEnum.YES);
+                JSONObject eventJson = new JSONObject(dto);
+                jmsProducer.send(eventJson.toString(), eventsDataQueue);
+                eventService.save(simulatedEvent);
+
             }
         }
 
-
-        eventService.saveAll(updatedEvents);
     }
 }
