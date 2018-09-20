@@ -11,6 +11,7 @@ import pl.coderslab.sports_events_api.entity.Event;
 import pl.coderslab.sports_events_api.entity.League;
 import pl.coderslab.sports_events_api.entity.Team;
 import pl.coderslab.sports_events_api.jms.JmsProducer;
+import pl.coderslab.sports_events_api.repository.LeagueRepository;
 import pl.coderslab.sports_events_api.service.*;
 
 import java.util.ArrayList;
@@ -34,11 +35,13 @@ public class EventsDataSupplierServiceImpl implements EventsDataSupplierService 
     @Autowired
     JmsProducer jmsProducer;
 
+
+
     private final String eventsDataQueue = "events_data.t";
 
 
     @Override
-    @Scheduled(fixedRate = (8 * 60 * 1000), initialDelay = 5 * 1000)
+    @Scheduled(fixedRate = (5 * 60 * 1000), initialDelay = 5 * 1000)
     public void generateAndSupply() {
         System.out.println("Started generating");
         List<League> leagues = leagueService.findAll();
@@ -62,7 +65,7 @@ public class EventsDataSupplierServiceImpl implements EventsDataSupplierService 
         }
     }
 
-    //    @Scheduled(fixedRate = (102 * 1000), initialDelay = (2 * 60 * 1000 + 1000))
+
     @Override
     @Scheduled(fixedRate = (12000), initialDelay = (5000))
     public void simulateGeneratedAndSupply() {

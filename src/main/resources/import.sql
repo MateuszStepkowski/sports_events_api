@@ -47,7 +47,7 @@ INSERT INTO team VALUES (null , 76, 0 , 0 ,'Fuenlabrada', 79, 0 ,2);
 
 INSERT INTO league VALUES (null , 'English Premier League', 1 , 1);
 INSERT INTO league VALUES (null , 'Primera Division', 2 , 1);
-INSERT INTO league VALUES (null , 'Primera Division', 2 , 2);
+INSERT INTO league VALUES (null , 'ACB BasketBall', 2 , 2);
 
 INSERT INTO league_teams VALUES (1 , 1);
 INSERT INTO league_teams VALUES (1 , 2);
